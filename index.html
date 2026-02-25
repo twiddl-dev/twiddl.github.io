@@ -19,6 +19,7 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#value">Value</a></li>
                 <li><a href="#how">How</a></li>
+                <li><a href="#updates">Updates</a></li>
                 <li><a href="#waitlist" class="nav-cta">Join Waitlist</a></li>
                 <li><a href="#" id="nav-demo-button">• Demo</a></li>
             </ul>
@@ -204,9 +205,117 @@
         </div>
     </section>
 
+    <section id="updates" class="updates">
+        <div class="section-header">
+            <h2>04 <span class="line"></span> UPDATES</h2>
+        </div>
+        <div class="updates-content">
+            <p class="large-text">Proof we’re building: <span class="highlight">real milestones</span> over time</p>
+
+            <div class="updates-window">
+            <div class="updates-strip" aria-label="Twiddl updates timeline" tabindex="0">
+                <article class="update-card" id="update-06">
+                    <div class="update-meta">Mar 01, 2026 · Update 06</div>
+                    <h3>Preparation Stage: Making Twiddl Demo-Ready for Everyone</h3>
+                    <p>This is the “make it real for leads” phase: not new hype features — just a clean, repeatable experience that anyone can try without scheduling around my laptop.</p>
+                    <p>The vision is simple: <strong>one public central node</strong>, a couple of <strong>connected local nodes</strong>, and a <strong>synthetic dataset</strong> that demonstrates the distributed query flow end-to-end — reliably.</p>
+                    <ul>
+                        <li><strong>Deploy central in the cloud</strong> behind HTTPS/WSS so it’s reachable 24/7</li>
+                        <li><strong>Connect internal local nodes</strong> that phone home and stay online</li>
+                        <li><strong>Ship a stable “happy path”</strong>: a few queries that always show the point</li>
+                        <li><strong>Turn demos into conversations</strong>: walkthroughs, Q&A, and pilot readiness</li>
+                    </ul>
+                    <p>If you’re evaluating Twiddl, this is where you’ll be able to test it like a product — not a prototype.</p>
+                </article>
+                <article class="update-card" id="update-01">
+                    <div class="update-meta">Oct 08, 2025 · Update 01</div>
+                    <h3>The First Obsession: “Why can’t I just query all of this?”</h3>
+                    <p>I kept running into the same friction: CSVs, JSON exports, XLSX files, and logs — and every “analysis” attempt turned into pipeline work. I didn’t want a pipeline. I wanted a question.</p>
+                    <p>So I started with a very practical experiment: <strong>can I treat mixed file formats as a single queryable surface</strong> using an embedded SQL engine? DuckDB became the workhorse because it’s fast, local-first, and surprisingly good at reading “real world” files.</p>
+                    <p>That early stage was messy in the best way: schema drift, messy headers, half-broken JSON, inconsistent timestamps. But it clarified the direction: <strong>Twiddl should be SQL-first and file-native</strong>, and it should do the boring work of making heterogeneous data feel coherent.</p>
+                    <p>What surprised me most wasn’t the SQL part—it was how much time gets wasted on “preparing” data that’s already valuable. Twiddl started as a refusal to keep writing one-off scripts just to answer one question, then throwing them away.</p>
+                    <ul>
+                        <li>DuckDB is an excellent local engine for “data-in-files,” but the moment files are scattered across machines, <em>the problem becomes distribution, not SQL</em>.</li>
+                        <li>The “one format to rule them all” dream is less important than <strong>one interface to ask questions</strong>.</li>
+                        <li>The real enemy is the <em>delay</em> between “I have data” and “I can learn something from it.”</li>
+                    </ul>
+                </article>
+
+                <article class="update-card" id="update-02">
+                    <div class="update-meta">Oct 23, 2025 · Update 02</div>
+                    <h3>The Remote File That Forced a New Architecture</h3>
+                    <p>The turning point was simple: the files I wanted to test were on another machine… in another location. I could wait — or accept that “data lives where it lives.”</p>
+                    <p>The deeper problem: copying is not only slow, it’s risky. The moment you start moving files around “just for analysis,” you create version confusion, accidental leaks, and permission questions you didn’t mean to trigger.</p>
+                    <p>Instead of building yet another “centralize everything first” system, I leaned into the constraint:</p>
+                    <ul>
+                        <li><strong>Keep data where it is</strong></li>
+                        <li><strong>Run queries where the data lives</strong></li>
+                        <li><strong>Coordinate and aggregate results centrally</strong></li>
+                    </ul>
+                    <p>That’s when the concept of <em>local nodes</em> and a <em>central node</em> solidified — not as a buzzword, just as the simplest way to make a distributed reality usable.</p>
+                    <ul>
+                        <li>A philosophy that later shaped security choices: authenticate nodes, validate messages, and avoid “just upload your data” as the default.</li>
+                    </ul>
+                </article>
+
+                <article class="update-card" id="update-03">
+                    <div class="update-meta">Nov 12, 2025 · Update 03</div>
+                    <h3>First Working Prototype: Two Machines, One End-to-End Query</h3>
+                    <p>I set a goal that felt small but was actually huge: <strong>make one query travel to another machine, execute locally, and come back with results</strong>.</p>
+                    <p>The first version was intentionally constrained: two machines, same local network, same OS assumptions, and a narrow set of file types. But the entire loop mattered: local metadata, heartbeats, remote dispatch, and results returning in one cycle.</p>
+                    <ul>
+                        <li>A local node watches a directory of files and infers metadata/schemas using DuckDB.</li>
+                        <li>It maintains a persistent WebSocket client connection to the central node.</li>
+                        <li>The central node accepts metadata + heartbeats, then dispatches query requests.</li>
+                        <li>The local node executes subqueries and streams rows back in chunks.</li>
+                    </ul>
+                    <p>What made this milestone feel “real” was that it wasn’t a toy RPC. The local node had to behave like a worker you can rely on; the central node had to act like a coordinator that knows where files live and routes queries correctly.</p>
+                </article>
+
+                <article class="update-card" id="update-04">
+                    <div class="update-meta">Dec 09, 2025 · Update 04</div>
+                    <h3>The “Cafe Demo” Moment: Remote Central + Local Laptop Node</h3>
+                    <p>After the LAN prototype worked, I took it outside the lab and ran a live demo on public Wi‑Fi. That’s where distributed systems become honest.</p>
+                    <ul>
+                        <li>Networking quirks are not theoretical.</li>
+                        <li>You need clear “online/offline/stale” state.</li>
+                        <li>Reconnect behavior has to be automatic (because nobody wants to babysit a node).</li>
+                    </ul>
+                    <p>It also forced the product story to sharpen. In a cafe, you don’t have time to explain a distributed architecture diagram — you have to show something simple: files on a machine, a central view, a query, and results.</p>
+                </article>
+
+                <article class="update-card" id="update-05">
+                    <div class="update-meta">Feb 25, 2026 · Update 05</div>
+                    <h3>Launcher, macOS Testing, and a Security Baseline (Current State)</h3>
+                    <p>This stage was about trust and usability: easier startup flow, cross-environment validation, and a clear security baseline for demos and pilots.</p>
+                    <ul>
+                        <li><strong>Launcher and run flow</strong>: the local launcher starts the local node container with a mounted watch directory.</li>
+                        <li><strong>Cross-environment testing (Mac)</strong>: validated that launcher/run assumptions hold on macOS setups.</li>
+                        <li><strong>Security + message validation</strong>: central HTTP uses basic auth; local↔central WS messages use API key + HMAC signature and are validated server-side.</li>
+                    </ul>
+                    <p>On the data path side, local nodes stream query results back in compressed chunks, and the central node aggregates and paginates results (with CSV export). This is the point where the runtime is stable enough to put in front of leads.</p>
+                    <p>One detail I care about: this isn’t “security theater.” It’s a pragmatic line in the sand for demos and pilots. Nodes must prove who they are, and the central node should be able to say “no” by default.</p>
+                </article>
+            </div>
+            <div class="updates-dots" aria-label="Updates navigation">
+                <button class="updates-dot is-active" type="button" data-target="update-06" aria-label="Go to update 06" aria-current="true"></button>
+                <button class="updates-dot" type="button" data-target="update-05" aria-label="Go to update 05"></button>
+                <button class="updates-dot" type="button" data-target="update-04" aria-label="Go to update 04"></button>
+                <button class="updates-dot" type="button" data-target="update-03" aria-label="Go to update 03"></button>
+                <button class="updates-dot" type="button" data-target="update-02" aria-label="Go to update 02"></button>
+                <button class="updates-dot" type="button" data-target="update-01" aria-label="Go to update 01"></button>
+            </div>
+            </div>
+
+            <div class="updates-cta">
+                <a href="#waitlist" class="cta-button cta-join">Get early access</a>
+            </div>
+        </div>
+    </section>
+
     <section id="waitlist" class="waitlist">
         <div class="section-header">
-            <h2>04 <span class="line"></span> JOIN WAITLIST</h2>
+            <h2>05 <span class="line"></span> JOIN WAITLIST</h2>
         </div>
         <div class="waitlist-content">
             <p class="large-text">Don't forget why you're here. <span class="highlight">Join the waitlist</span></p>
@@ -237,6 +346,7 @@
                 <a href="#about">About</a>
                 <a href="#value">Value</a>
                 <a href="#how">How</a>
+                <a href="#updates">Updates</a>
                 <a href="#waitlist">Join</a>
                 <a href="#" id="footer-demo-button">• Demo</a>
             </div>
@@ -280,6 +390,142 @@
                     document.body.classList.remove('modal-open');
                 }
             });
+
+            // Updates dots navigation (looping carousel)
+            const updatesStrip = document.querySelector('.updates-strip');
+            const dotButtons = Array.from(document.querySelectorAll('.updates-dot'));
+
+            function setActiveDotById(cardId) {
+                dotButtons.forEach((btn) => {
+                    const isActive = btn.dataset.target === cardId;
+                    btn.classList.toggle('is-active', isActive);
+                    if (isActive) {
+                        btn.setAttribute('aria-current', 'true');
+                    } else {
+                        btn.removeAttribute('aria-current');
+                    }
+                });
+            }
+
+            function scrollToCard(card, behavior = 'auto') {
+                if (!updatesStrip || !card) return;
+                const left = card.offsetLeft + card.offsetWidth / 2 - updatesStrip.clientWidth / 2;
+                updatesStrip.scrollTo({ left, behavior });
+            }
+
+            if (updatesStrip && dotButtons.length && updatesStrip.dataset.loopInit !== 'true') {
+                const realCards = Array.from(updatesStrip.querySelectorAll('.update-card')).filter((c) => c.id);
+                const realById = new Map(realCards.map((c) => [c.id, c]));
+
+                if (realCards.length >= 2) {
+                    updatesStrip.dataset.loopInit = 'true';
+                    const firstReal = realCards[0];
+                    const lastReal = realCards[realCards.length - 1];
+
+                    const firstClone = firstReal.cloneNode(true);
+                    firstClone.removeAttribute('id');
+                    firstClone.dataset.cloneOf = firstReal.id;
+                    firstClone.setAttribute('aria-hidden', 'true');
+
+                    const lastClone = lastReal.cloneNode(true);
+                    lastClone.removeAttribute('id');
+                    lastClone.dataset.cloneOf = lastReal.id;
+                    lastClone.setAttribute('aria-hidden', 'true');
+
+                    updatesStrip.insertBefore(lastClone, firstReal);
+                    updatesStrip.appendChild(firstClone);
+
+                    // Start at the first real card (not the prepended clone)
+                    requestAnimationFrame(() => {
+                        scrollToCard(firstReal, 'auto');
+                        setActiveDotById(firstReal.id);
+                    });
+
+                    dotButtons.forEach((btn) => {
+                        btn.addEventListener('click', () => {
+                            const targetId = btn.dataset.target;
+                            const card = realById.get(targetId);
+                            if (card) {
+                                scrollToCard(card, 'smooth');
+                                setActiveDotById(targetId);
+                            }
+                        });
+                    });
+
+                    let isJumping = false;
+                    const allCards = Array.from(updatesStrip.querySelectorAll('.update-card'));
+                    let rafPending = false;
+
+                    function updateActiveFromScroll() {
+                        rafPending = false;
+                        if (!updatesStrip || !allCards.length) return;
+
+                        // Hard wrap at edges (prevents "stuck" behavior on some scroll inputs)
+                        const maxScrollLeft = updatesStrip.scrollWidth - updatesStrip.clientWidth;
+                        const EDGE_EPS = 2;
+                        if (!isJumping && updatesStrip.scrollLeft <= EDGE_EPS) {
+                            const real = lastReal;
+                            isJumping = true;
+                            scrollToCard(real, 'auto');
+                            setActiveDotById(real.id);
+                            requestAnimationFrame(() => {
+                                isJumping = false;
+                            });
+                            return;
+                        }
+
+                        if (!isJumping && updatesStrip.scrollLeft >= maxScrollLeft - EDGE_EPS) {
+                            const real = firstReal;
+                            isJumping = true;
+                            scrollToCard(real, 'auto');
+                            setActiveDotById(real.id);
+                            requestAnimationFrame(() => {
+                                isJumping = false;
+                            });
+                            return;
+                        }
+
+                        const center = updatesStrip.scrollLeft + updatesStrip.clientWidth / 2;
+                        let closest = null;
+                        let closestDist = Infinity;
+
+                        for (const card of allCards) {
+                            const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+                            const dist = Math.abs(cardCenter - center);
+                            if (dist < closestDist) {
+                                closest = card;
+                                closestDist = dist;
+                            }
+                        }
+
+                        if (!closest) return;
+
+                        const cloneOf = closest.dataset && closest.dataset.cloneOf;
+                        const activeId = cloneOf || closest.id;
+                        if (activeId) setActiveDotById(activeId);
+
+                        // If we've snapped to a clone (near-perfect center), jump to the real slide.
+                        if (!isJumping && cloneOf && closestDist < 2) {
+                            const real = realById.get(cloneOf);
+                            if (!real) return;
+                            isJumping = true;
+                            scrollToCard(real, 'auto');
+                            requestAnimationFrame(() => {
+                                isJumping = false;
+                            });
+                        }
+                    }
+
+                    updatesStrip.addEventListener('scroll', () => {
+                        if (rafPending) return;
+                        rafPending = true;
+                        requestAnimationFrame(updateActiveFromScroll);
+                    });
+
+                    // Initial dot + loop state
+                    requestAnimationFrame(updateActiveFromScroll);
+                }
+            }
         });
     </script>
     
