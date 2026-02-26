@@ -216,32 +216,27 @@
             <div class="updates-strip" aria-label="Twiddl updates timeline" tabindex="0">
                 <article class="update-card" id="update-06">
                     <div class="update-meta">Mar 01, 2026 · Latest Update</div>
-                    <h3>Preparation Stage: Making Twiddl Demo-Ready for Everyone</h3>
-                  
-                    <p>This phase is about turning the current runtime into something leads can evaluate without a custom setup, a guided session, or timing constraints. The goal isn’t feature expansion; it’s making the experience repeatable, reliable, and easy to try as a product.</p>
-                  
-                    <p>The target demo shape is intentionally simple: one public central node, a small set of connected local nodes, and a synthetic dataset that demonstrates the distributed query flow end-to-end without surprises.</p>
-                  
+                    <h3>Preparation Stage: Opening Twiddl for Live Evaluation</h3>
+                    <p>Twiddl is entering the stage where it moves from controlled demos to structured, open evaluation. The current focus is on readiness, shaping the system into a form that can be experienced consistently by teams exploring distributed data access in practice.</p>
+                    <p>The near-term vision is clear: a publicly reachable central node in the cloud, connected to a set of internal continuously running local nodes, with a curated dataset that demonstrates the distributed query model under realistic conditions. The objective is to make the architecture visible through usage, not explanation.</p>
+                    <p>The rollout includes:</p>
                     <ul>
-                      <li>Deploy the central node in the cloud behind HTTPS/WSS so it’s reachable continuously</li>
-                      <li>Keep internal local nodes connected with outbound connections that stay online and recover automatically</li>
-                      <li>Ship a stable “happy path” with a small set of queries that consistently demonstrate value</li>
-                      <li>Convert demos into pilots by making walkthroughs, Q&A, and evaluation steps straightforward</li>
+                      <li>A production-hosted central node exposed via webapp and available continuously</li>
+                      <li>Persistent local nodes maintaining secure outbound connections located on Twiddl's machines</li>
+                      <li>A defined demonstration dataset that reflects real operational patterns</li>
+                      <li>A stable query flow that highlights cross-node execution and aggregation</li>
                     </ul>
-                  
-                    <p>If Twiddl is being evaluated, this stage is meant to make that evaluation feel like product testing rather than prototype handling.</p>
+                    <p>This stage also marks the beginning of live walkthroughs, interactive Q&A sessions, and structured demo calls. Instead of presenting slides or diagrams, the focus shifts to running real queries, discussing architecture decisions in context, and exploring pilot scenarios directly within the system.</p>
+                    <p>The goal is simple: move from isolated demos to active evaluation conversations, and from conversations to early pilot deployments.</p>
                   </article>
                   
                   
                   <article class="update-card" id="update-01">
                     <div class="update-meta">Sep 08, 2025 · Update 01</div>
                     <h3>The First Obsession: “Why can’t I just query all of this?”</h3>
-                  
-                    <p>The starting friction was practical: CSVs, JSON exports, XLSX files, and logs tend to be valuable immediately, yet most “analysis” efforts still begin with prep work, one-off scripts, and temporary pipelines. The question wasn’t about building another data stack; it was about making existing files queryable as-is, without turning every question into engineering overhead.</p>
-                  
-                    <p>The first experiment focused on whether mixed formats could be treated as a single SQL-queryable surface using an embedded engine. DuckDB quickly proved effective because it’s fast, local-first, and unusually capable at reading real-world files, even when those files are messy.</p>
-                  
-                    <p>That mess was the point: schema drift, inconsistent headers, semi-broken JSON, and timestamp inconsistencies showed up immediately, and they clarified the direction. Twiddl should be SQL-first and file-native, and it should absorb inconsistency so that querying stays simple.</p>
+                    <p>The friction is practical: CSVs, JSON exports, XLSX files, and logs are valuable immediately, yet most “analysis” still begins with prep work, one-off scripts, and temporary pipelines. The question is about making existing files queryable as-is, without engineering overhead.</p>
+                    <p>The first experiment is straightforward: treat mixed formats as one SQL-queryable surface using an embedded engine. DuckDB is the obvious candidate because it’s fast, local-first, and unusually capable at reading real-world files, even when those files are messy.</p>
+                    <p>That mess is the point: schema drift, inconsistent headers, semi-broken JSON, and timestamp inconsistencies show up immediately, and they clarify the direction. Twiddl should be SQL-first and file-native, and it should absorb inconsistency so that querying stays simple.</p>
                   
                     <ul>
                       <li>Local SQL execution is efficient; once files are spread across machines, distribution becomes the core problem.</li>
@@ -254,71 +249,56 @@
                   <article class="update-card" id="update-02">
                     <div class="update-meta">Oct 23, 2025 · Update 02</div>
                     <h3>The Remote File That Forced a New Architecture</h3>
-                  
-                    <p>The architecture shift started during a basic test. A dataset needed for validation wasn’t on the same machine; it was on another computer in another location. Copying the files over would have solved the immediate problem, but it also revealed the structural issue: in real environments, data is distributed by default, and “just move it” creates version confusion, permission complexity, and unnecessary exposure.</p>
-                  
-                    <p>Rather than optimizing copying, Twiddl leaned into the constraint: data should remain where it is, queries should run where the data lives, and results should be coordinated centrally. That reframing turned a blocked test case into the guiding design principle.</p>
-                  
+                    <p>During our basic tests one of our datasets needed for validation wasn’t on this machine; it was on another computer in another location. Copying the files over solves the immediate problem, but it reveals the structural issue: in real environments, data is distributed by default, and “just move it” creates version confusion, time delays, and unnecessary exposure.</p>
+                    <p>Rather than optimizing copying, Twiddl leans into the constraint: data stays where it is, queries run where the data lives, and results are coordinated centrally. That reframing turns a blocked test case into the guiding design principle.</p>
                     <ul>
                       <li>Keep data where it is, instead of centralizing by default</li>
                       <li>Execute locally, close to files and existing permissions</li>
                       <li>Coordinate centrally, routing and aggregating results across nodes</li>
                     </ul>
-                  
-                    <p>This is where the concept of local nodes and a central node solidified, not as a buzzword, but as the simplest workable structure for a distributed reality. It also shaped early security choices: nodes authenticate, messages are validated, and the default posture remains conservative.</p>
+                    <p>The local-node + central-node model now feels like the simplest workable structure for a distributed reality.</p>
                   </article>
                   
                   
                   <article class="update-card" id="update-03">
                     <div class="update-meta">Nov 12, 2025 · Update 03</div>
                     <h3>First Working Prototype: Two Machines, One End-to-End Query</h3>
-                  
-                    <p>The milestone was intentionally narrow: make a query travel to another machine, execute locally, and return results end-to-end. The first version was constrained to reduce variables — two machines, the same local network, similar OS assumptions, and a limited set of file types — but the full loop mattered more than breadth.</p>
-                  
-                    <p>What made this step meaningful was that it required coordinator behavior and worker behavior, not just RPC calls. Metadata had to be discovered and registered, connectivity had to be persistent, and results had to stream back reliably.</p>
-                  
+                    <p>The milestone is intentionally narrow: make a query travel to another machine, execute locally, and return results end-to-end. The first version stays to test in sterile conditions: two machines, the same local network, similar OS assumptions, and a limited set of file types to close the loop.</p>
+                    <p>What makes this step meaningful is that it requires coordinator behavior and worker behavior, not just RPC calls. Metadata has to be discovered and registered, connectivity has to be persistent, and results have to stream back reliably.</p>
                     <ul>
                       <li>A local node watches a directory and infers metadata/schemas using DuckDB</li>
                       <li>The local node maintains a persistent WebSocket client connection to the central node</li>
                       <li>The central node tracks metadata + heartbeats, then dispatches query requests</li>
                       <li>The local node executes subqueries and streams rows back in chunks</li>
                     </ul>
-                  
-                    <p>This validated the core coordination model and established the foundation for scaling beyond a single controlled test.</p>
+                    <p>If this loop stays stable, it becomes the foundation for scaling beyond a single controlled test.</p>
                   </article>
                   
                   
                   <article class="update-card" id="update-04">
                     <div class="update-meta">Dec 21, 2025 · Update 04</div>
                     <h3>The “Cafe Demo” Moment: Remote Central + Local Laptop Node</h3>
-                  
-                    <p>After the LAN prototype worked, the system was tested in a setting that doesn’t cooperate: a remote central node, a laptop local node, and public Wi-Fi. This is where network assumptions stop being theoretical and operational behavior becomes visible.</p>
-                  
-                    <p>The requirements that surfaced were not “nice to have.” Clear online/offline/stale states became necessary for trust, and reconnection behavior had to be automatic because manual babysitting is not a product experience.</p>
-                  
+                    <p>The prototype is leaving the LAN. The system is now being tested in a setting that doesn’t cooperate: a remote central node, a laptop local node, and public Wi-Fi. This is where and operational behavior becomes visible.</p>
+                    <p>Clear online/offline/stale states are necessary for trust, and reconnection has to be automatic because manual babysitting is not a product experience.</p>
                     <ul>
                       <li>Connectivity issues need first-class handling, not best-effort retries</li>
                       <li>Node state must be explicit and visible (online/offline/stale)</li>
                       <li>Reconnect must be automatic and safe, without manual intervention</li>
                     </ul>
-                  
-                    <p>This test also sharpened the story: when conditions are imperfect, the workflow must still be simple — files, central view, query, results — without requiring an architecture explanation.</p>
+                    <p>This test sharpens the story: when conditions are imperfect, the workflow still needs to be simple: files, central view, query, results.</p>
                   </article>
                   
                   
                   <article class="update-card" id="update-05">
                     <div class="update-meta">Jan 25, 2026 · Update 05</div>
-                    <h3>Launcher, macOS Testing, and a Security Baseline (Current State)</h3>
-                  
-                    <p>This stage focused on reducing operational friction and setting a clear security baseline suitable for demos and early pilots. The emphasis was on reliable startup, cross-environment validation, and a message-level trust model that is pragmatic rather than performative.</p>
-                  
+                    <h3>Launcher, macOS Testing, and a Security Baseline</h3>
+                    <p>The focus right now is reducing operational friction and setting a clear security baseline suitable for demos and early pilots. The emphasis is reliable startup, cross-environment validation, and a message-level trust model that is pragmatic.</p>
                     <ul>
                       <li>Launcher and run flow: the local launcher starts the local node container with a mounted watch directory</li>
-                      <li>Cross-environment testing (macOS): launcher and runtime assumptions validated across Mac setups</li>
-                      <li>Security and message validation: central HTTP uses basic auth; local↔central WS uses API key + HMAC signature with server-side validation</li>
+                      <li>Cross-environment testing (macOS): launcher and runtime assumptions are being validated across Mac setups</li>
+                      <li>Security and message validation</li>
                     </ul>
-                  
-                    <p>On the data path side, local nodes stream query results back in compressed chunks, and the central node aggregates and paginates results with CSV export. At this point the runtime is stable enough to put in front of leads, while keeping a conservative default posture: nodes prove identity, messages are verified, and the coordinator can reject by default.</p>
+                    <p>On the data path side, local nodes stream query results back in compressed chunks, and the central node aggregates and paginates results with CSV export. The runtime now feels stable enough to put in front of leads, while keeping a conservative default posture: nodes prove identity, and messages are verified.</p>
                   </article>
             </div>
             <div class="updates-dots" aria-label="Updates navigation">
