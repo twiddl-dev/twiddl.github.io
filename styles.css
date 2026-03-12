@@ -130,11 +130,20 @@ header {
 }
 
 .logo {
-    font-family: 'Space Mono', monospace;
-    font-weight: 700;
-    font-size: 2rem;
-    color: var(--primary);
-    letter-spacing: -1px;
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+    max-width: min(220px, 36vw);
+    text-decoration: none;
+    line-height: 0;
+}
+
+.logo-mark {
+    display: block;
+    width: auto;
+    height: 75px;
+    max-width: 100%;
+    object-fit: contain;
 }
 
 nav ul {
@@ -202,7 +211,7 @@ nav ul li a:hover {
 .hero-content {
     max-width: 800px;
     position: relative;
-    z-index: 2;
+    z-index: 3;
     padding: 0 1.5rem;
 }
 
@@ -254,7 +263,8 @@ nav ul li a:hover {
     right: -10%;
     transform-style: preserve-3d;
     animation: rotateCube 60s infinite linear;
-    z-index: 2;
+    z-index: 1;
+    pointer-events: none;
 }
 
 .cube-face {
@@ -776,6 +786,48 @@ nav ul li a:hover {
     display: none; /* Chrome/Safari */
 }
 
+.updates-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: clamp(28px, 3.2vw, 42px);
+    height: clamp(56px, 12vw, 96px);
+    border: 1px solid rgba(0, 255, 179, 0.35);
+    background: rgba(10, 10, 10, 0.35);
+    color: rgba(0, 255, 179, 0.92);
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 4;
+    backdrop-filter: blur(2px);
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.updates-arrow:hover {
+    background: rgba(0, 255, 179, 0.14);
+    border-color: rgba(0, 255, 179, 0.75);
+}
+
+.updates-arrow:active {
+    transform: translateY(-50%) scale(0.97);
+}
+
+.updates-arrow span {
+    font-size: clamp(22px, 2vw, 30px);
+    line-height: 1;
+    margin-top: -2px;
+}
+
+.updates-arrow-left {
+    left: clamp(4px, 1.4vw, 14px);
+}
+
+.updates-arrow-right {
+    right: clamp(4px, 1.4vw, 14px);
+}
+
 .updates-strip:focus-visible {
     outline: 2px solid rgba(0, 255, 179, 0.6);
     outline-offset: 6px;
@@ -974,10 +1026,18 @@ footer {
 }
 
 .footer-logo {
-    font-family: 'Space Mono', monospace;
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: var(--primary);
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    line-height: 0;
+}
+
+.footer-logo-mark {
+    display: block;
+    width: auto;
+    height: 56px;
+    max-width: min(260px, 48vw);
+    object-fit: contain;
 }
 
 .footer-links {
@@ -1015,6 +1075,10 @@ footer {
         gap: 2rem;
         text-align: center;
     }
+
+    .footer-logo-mark {
+        height: 48px;
+    }
 }
 
 #footer-demo-button {
@@ -1027,6 +1091,19 @@ footer {
 
 /* Media Query Adjustments */
 @media (max-width: 768px) {
+    .logo {
+        max-width: min(170px, 50vw);
+    }
+
+    .logo-mark {
+        height: 62px;
+    }
+
+    .updates-arrow {
+        width: 30px;
+        height: 56px;
+    }
+
     nav {
         position: fixed;
         top: 0;
@@ -1584,10 +1661,9 @@ input::selection {
     background-color: rgba(0, 255, 179, 0.1);
 }
 
-/* Logo link styling */
-.logo a {
-    color: var(--primary);
-    text-decoration: none;
+/* Logo hover state */
+.logo:hover {
+    opacity: 0.92;
 }
 
 /* Demo workspace for interactive demo page */

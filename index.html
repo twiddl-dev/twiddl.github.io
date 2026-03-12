@@ -13,7 +13,16 @@
     <div class="noise-overlay"></div>
     
     <header>
-        <div class="logo">TWIDDL</div>
+        <a class="logo" href="#hero" aria-label="Twiddl home">
+            <img
+                class="logo-mark"
+                src="assets/logo/logo_for_black_transparent_500.png"
+                sizes="(max-width: 768px) 140px, 180px"
+                width="368"
+                height="216"
+                alt="Twiddl"
+            >
+        </a>
         <nav>
             <ul>
                 <li><a href="#about">About</a></li>
@@ -213,6 +222,9 @@
             <p class="large-text">Proof we’re building: <span class="highlight">real milestones</span> over time</p>
 
             <div class="updates-window">
+            <button class="updates-arrow updates-arrow-left" type="button" aria-label="Scroll updates left">
+                <span aria-hidden="true">&#x2039;</span>
+            </button>
             <div class="updates-strip" aria-label="Twiddl updates timeline" tabindex="0">
                 <article class="update-card" id="update-06">
                     <div class="update-meta">Mar 01, 2026 · Latest Update</div>
@@ -230,30 +242,29 @@
                     <p>The goal is simple: move from isolated demos to active evaluation conversations, and from conversations to early pilot deployments.</p>
                   </article>
                   
-                  <article class="update-card" id="update-01">
-                    <div class="update-meta">Sep 08, 2025 · Update 01</div>
-                    <h3>The First Obsession: “Why can’t I just query all of this?”</h3>
-                    <p>The friction is practical: CSVs, JSON exports, XLSX files, and logs are valuable immediately, yet most “analysis” still begins with prep work—one-off scripts, temporary pipelines, and manual cleanup. The question is about making existing files queryable as-is, without engineering overhead.</p>
-                    <p>The first experiment is straightforward: treat mixed formats as one SQL-queryable surface using an embedded engine. DuckDB is the obvious candidate because it’s fast, local-first, and unusually capable at reading real-world files—even when those files are messy.</p>
-                    <p>That mess is the point: schema drift, inconsistent headers, semi-broken JSON, and timestamp inconsistencies show up immediately, and they clarify the direction. Twiddl should be SQL-first and file-native, and it should absorb inconsistency so that querying stays simple.</p>
+                  <article class="update-card" id="update-05">
+                    <div class="update-meta">Jan 25, 2026 · Update 05</div>
+                    <h3>Launcher, macOS Testing, and a Security Baseline</h3>
+                    <p>The focus right now is reducing operational friction and setting a clear security baseline suitable for evaluation and early pilots. The emphasis is reliable startup, cross-environment validation, and a trust model that’s pragmatic for real teams.</p>
                     <ul>
-                      <li>Local SQL execution is efficient; in real organizations, the bigger problem is that files are spread across teams, tools, and locations.</li>
-                      <li>The goal isn’t “one format to rule them all,” but one interface to ask questions across what you already have.</li>
-                      <li>The real cost is the delay between “data exists” and “answers are accessible”—and the people-time spent bridging that gap.</li>
+                      <li>Launcher and run flow: a simple launcher starts the local node container with a mounted watch directory (low setup overhead)</li>
+                      <li>Cross-environment testing (macOS): launcher and runtime assumptions are being validated across Mac setups (common in distributed teams)</li>
+                      <li>Security and message validation: nodes prove identity and messages are verified to support safer evaluation</li>
                     </ul>
+                    <p>On the data path side, local nodes stream query results back in compressed chunks, and the central node aggregates and paginates results with CSV export. The runtime now feels stable enough to put in front of teams—while keeping a conservative default posture: secure outbound connectivity, explicit node status, and verifiable messaging.</p>
                   </article>
                   
-                  <article class="update-card" id="update-02">
-                    <div class="update-meta">Oct 23, 2025 · Update 02</div>
-                    <h3>The Remote File That Forced a New Architecture</h3>
-                    <p>During early validation, one dataset we needed wasn’t on this machine—it was on another computer in another location. Copying it over would solve the immediate problem, but it reveals the structural reality: in most organizations, data is distributed by default, and “just move it” creates version confusion, delays, and unnecessary exposure.</p>
-                    <p>Rather than optimizing copying, Twiddl leans into the constraint: data stays where it is, queries run where the data lives, and results are coordinated centrally. That reframing turns a blocked test case into the guiding principle.</p>
+                  <article class="update-card" id="update-04">
+                    <div class="update-meta">Dec 21, 2025 · Update 04</div>
+                    <h3>The “Cafe Demo” Moment: Remote Central + Local Laptop Node</h3>
+                    <p>The prototype is leaving the LAN. The system is now being tested in a setting that doesn’t cooperate: a remote central node, a laptop local node, and public Wi-Fi. This is where operational behavior becomes visible.</p>
+                    <p>Distributed teams don’t live on perfect networks. So trust signals matter: clear online/offline/stale states, safe automatic reconnection, and an experience that doesn’t require babysitting.</p>
                     <ul>
-                      <li>Keep data where it is, instead of centralizing by default</li>
-                      <li>Execute locally, close to files and existing permissions</li>
-                      <li>Coordinate centrally, routing and aggregating results across locations</li>
+                      <li>Connectivity issues need first-class handling, not best-effort retries</li>
+                      <li>Node state must be explicit and visible (online/offline/stale)</li>
+                      <li>Reconnect must be automatic and safe, without manual intervention</li>
                     </ul>
-                    <p>For distributed teams—plants, hospitals, regional offices—this is the difference between “send me the export” and “ask once, get a unified answer.” The local-node + central-node model now feels like the simplest workable structure for a distributed reality.</p>
+                    <p>This test sharpened the product promise: when conditions are imperfect, the workflow still needs to be simple—files stay local, the central view stays clear, queries run where data lives, and results come back when connectivity allows.</p>
                   </article>
                   
                   <article class="update-card" id="update-03">
@@ -270,31 +281,35 @@
                     <p>Customer meaning: a team can ask a question from one place and get answers from multiple places—without building pipelines first. If this loop stays stable, it becomes the foundation for scaling beyond controlled tests into real multi-site environments.</p>
                   </article>
                   
-                  <article class="update-card" id="update-04">
-                    <div class="update-meta">Dec 21, 2025 · Update 04</div>
-                    <h3>The “Cafe Demo” Moment: Remote Central + Local Laptop Node</h3>
-                    <p>The prototype is leaving the LAN. The system is now being tested in a setting that doesn’t cooperate: a remote central node, a laptop local node, and public Wi-Fi. This is where operational behavior becomes visible.</p>
-                    <p>Distributed teams don’t live on perfect networks. So trust signals matter: clear online/offline/stale states, safe automatic reconnection, and an experience that doesn’t require babysitting.</p>
+                  <article class="update-card" id="update-02">
+                    <div class="update-meta">Oct 23, 2025 · Update 02</div>
+                    <h3>The Remote File That Forced a New Architecture</h3>
+                    <p>During early validation, one dataset we needed wasn’t on this machine—it was on another computer in another location. Copying it over would solve the immediate problem, but it reveals the structural reality: in most organizations, data is distributed by default, and “just move it” creates version confusion, delays, and unnecessary exposure.</p>
+                    <p>Rather than optimizing copying, Twiddl leans into the constraint: data stays where it is, queries run where the data lives, and results are coordinated centrally. That reframing turns a blocked test case into the guiding principle.</p>
                     <ul>
-                      <li>Connectivity issues need first-class handling, not best-effort retries</li>
-                      <li>Node state must be explicit and visible (online/offline/stale)</li>
-                      <li>Reconnect must be automatic and safe, without manual intervention</li>
+                      <li>Keep data where it is, instead of centralizing by default</li>
+                      <li>Execute locally, close to files and existing permissions</li>
+                      <li>Coordinate centrally, routing and aggregating results across locations</li>
                     </ul>
-                    <p>This test sharpened the product promise: when conditions are imperfect, the workflow still needs to be simple—files stay local, the central view stays clear, queries run where data lives, and results come back when connectivity allows.</p>
+                    <p>For distributed teams—plants, hospitals, regional offices—this is the difference between “send me the export” and “ask once, get a unified answer.” The local-node + central-node model now feels like the simplest workable structure for a distributed reality.</p>
                   </article>
                   
-                  <article class="update-card" id="update-05">
-                    <div class="update-meta">Jan 25, 2026 · Update 05</div>
-                    <h3>Launcher, macOS Testing, and a Security Baseline</h3>
-                    <p>The focus right now is reducing operational friction and setting a clear security baseline suitable for evaluation and early pilots. The emphasis is reliable startup, cross-environment validation, and a trust model that’s pragmatic for real teams.</p>
+                  <article class="update-card" id="update-01">
+                    <div class="update-meta">Sep 08, 2025 · Update 01</div>
+                    <h3>The First Obsession: “Why can’t I just query all of this?”</h3>
+                    <p>The friction is practical: CSVs, JSON exports, XLSX files, and logs are valuable immediately, yet most “analysis” still begins with prep work—one-off scripts, temporary pipelines, and manual cleanup. The question is about making existing files queryable as-is, without engineering overhead.</p>
+                    <p>The first experiment is straightforward: treat mixed formats as one SQL-queryable surface using an embedded engine. DuckDB is the obvious candidate because it’s fast, local-first, and unusually capable at reading real-world files—even when those files are messy.</p>
+                    <p>That mess is the point: schema drift, inconsistent headers, semi-broken JSON, and timestamp inconsistencies show up immediately, and they clarify the direction. Twiddl should be SQL-first and file-native, and it should absorb inconsistency so that querying stays simple.</p>
                     <ul>
-                      <li>Launcher and run flow: a simple launcher starts the local node container with a mounted watch directory (low setup overhead)</li>
-                      <li>Cross-environment testing (macOS): launcher and runtime assumptions are being validated across Mac setups (common in distributed teams)</li>
-                      <li>Security and message validation: nodes prove identity and messages are verified to support safer evaluation</li>
+                      <li>Local SQL execution is efficient; in real organizations, the bigger problem is that files are spread across teams, tools, and locations.</li>
+                      <li>The goal isn’t “one format to rule them all,” but one interface to ask questions across what you already have.</li>
+                      <li>The real cost is the delay between “data exists” and “answers are accessible”—and the people-time spent bridging that gap.</li>
                     </ul>
-                    <p>On the data path side, local nodes stream query results back in compressed chunks, and the central node aggregates and paginates results with CSV export. The runtime now feels stable enough to put in front of teams—while keeping a conservative default posture: secure outbound connectivity, explicit node status, and verifiable messaging.</p>
                   </article>
             </div>
+            <button class="updates-arrow updates-arrow-right" type="button" aria-label="Scroll updates right">
+                <span aria-hidden="true">&#x203A;</span>
+            </button>
             <div class="updates-dots" aria-label="Updates navigation">
                 <button class="updates-dot is-active" type="button" data-target="update-06" aria-label="Go to update 06" aria-current="true"></button>
                 <button class="updates-dot" type="button" data-target="update-05" aria-label="Go to update 05"></button>
@@ -339,7 +354,15 @@
 
     <footer>
         <div class="footer-content">
-            <div class="footer-logo">TWIDDL</div>
+            <a class="footer-logo" href="#hero" aria-label="Twiddl home">
+                <img
+                    class="footer-logo-mark"
+                    src="assets/logo/logo_for_black_transparent_500.png"
+                    width="368"
+                    height="216"
+                    alt="Twiddl"
+                >
+            </a>
             <div class="footer-links">
                 <a href="#about">About</a>
                 <a href="#value">Value</a>
@@ -392,6 +415,15 @@
             // Updates dots navigation (looping carousel)
             const updatesStrip = document.querySelector('.updates-strip');
             const dotButtons = Array.from(document.querySelectorAll('.updates-dot'));
+            const updatesArrowLeft = document.querySelector('.updates-arrow-left');
+            const updatesArrowRight = document.querySelector('.updates-arrow-right');
+
+            function getActiveDotTargetId() {
+                const active = dotButtons.find(
+                    (btn) => btn.classList.contains('is-active') || btn.getAttribute('aria-current') === 'true'
+                );
+                return active ? active.dataset.target : null;
+            }
 
             function setActiveDotById(cardId) {
                 dotButtons.forEach((btn) => {
@@ -419,6 +451,7 @@
                     updatesStrip.dataset.loopInit = 'true';
                     const firstReal = realCards[0];
                     const lastReal = realCards[realCards.length - 1];
+                    const realOrderIds = realCards.map((c) => c.id);
 
                     const firstClone = firstReal.cloneNode(true);
                     firstClone.removeAttribute('id');
@@ -449,6 +482,34 @@
                             }
                         });
                     });
+
+                    if (updatesArrowLeft) {
+                        updatesArrowLeft.addEventListener('click', () => {
+                            const activeId = getActiveDotTargetId() || firstReal.id;
+                            const current = realOrderIds.indexOf(activeId);
+                            const next = current <= 0 ? realOrderIds.length - 1 : current - 1;
+                            const targetId = realOrderIds[next];
+                            const card = realById.get(targetId);
+                            if (card) {
+                                scrollToCard(card, 'smooth');
+                                setActiveDotById(targetId);
+                            }
+                        });
+                    }
+
+                    if (updatesArrowRight) {
+                        updatesArrowRight.addEventListener('click', () => {
+                            const activeId = getActiveDotTargetId() || firstReal.id;
+                            const current = realOrderIds.indexOf(activeId);
+                            const next = current >= realOrderIds.length - 1 ? 0 : current + 1;
+                            const targetId = realOrderIds[next];
+                            const card = realById.get(targetId);
+                            if (card) {
+                                scrollToCard(card, 'smooth');
+                                setActiveDotById(targetId);
+                            }
+                        });
+                    }
 
                     let isJumping = false;
                     const allCards = Array.from(updatesStrip.querySelectorAll('.update-card'));
